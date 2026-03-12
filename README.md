@@ -40,8 +40,6 @@ https://dxzeahnbsl9xpx3r4wrjrd.streamlit.app/
 ------------------------------------------------------------------------
 
 
----
-
 ## Arquitetura da aplicação
 
 A aplicação segue uma arquitetura simples dividida em três partes:
