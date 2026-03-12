@@ -1,9 +1,7 @@
-import os
 import streamlit as st
-from groq import Groq
 from groq_config import response_chat_prompt_llm
 
-def config_page_view():
+def config_page_view() -> None:
     """ configuração principal da application
 
     Configuração principal da application, eventos, estilos e etc.
@@ -18,7 +16,7 @@ def config_page_view():
     )
 
 
-def sidebar_personal_view():
+def sidebar_personal_view() -> str:
     """ Personalização do sidebar da pagina
 
     Utilizando markdown + html, para estilização da pagina, além de metodos do streamlit.
@@ -105,11 +103,11 @@ def sidebar_personal_view():
     return groq_api_key
 
 
-def config_state_message():
-    """ configuração da memória de estado
+def config_state_message() -> None:
+    """ Configuração da memória de estado
 
-    configuração da mememoria de estado do usuario, para guardar o historico de mensagens entre
-    assistente IA e Usuario
+    Configuração da memória de estado do usuário, para guardar o histórico de mensagens entre
+    assistente IA e Usuário
 
     :return: None
     """
@@ -120,12 +118,12 @@ def config_state_message():
             st.markdown(message['content'])
 
 
-def main_page_custom():
-    """ customização da página principal da aplicação
+def main_page_custom() -> None:
+    """ Customização da página principal da aplicação
 
-    Responsavel pela customização e importação da memoria de estado do usuairo
+    Responsável pela customização e importação da memória de estado do usuário
 
-    :return: api_key_groq
+    :return: None
     """
     api_key_groq = sidebar_personal_view()
     config_state_message()

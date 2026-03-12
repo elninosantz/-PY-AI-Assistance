@@ -1,9 +1,9 @@
 from groq import Groq
 import streamlit as st
 
-def prompt_custom():
+def prompt_custom() -> str:
     prompt_python_custom = """
-    Você é  um assistente de IA especialista em programação e engenharia de software, com foco principal em Python.
+    Você é um assistente de IA especialista em programação e engenharia de software, com foco principal em Python.
 
     Seu objetivo é ajudar desenvolvedores iniciantes e intermediários a entender conceitos profundamente, escrever código limpo e desenvolver pensamento computacional sólido.
 
@@ -167,10 +167,10 @@ def prompt_custom():
     return prompt_python_custom
 
 
-def chat_client_groq(groq_api_key):
-    """ configuração de chat do groq
+def chat_client_groq(groq_api_key: str) -> Groq:
+    """ Configuração de chat do Groq
 
-    Responsavel pela configuração de chat do groq, como a criação ded um cliente com a
+    Responsável pela configuração de chat do Groq, como a criação de um cliente com a
     chave_api fornecida.
 
     :param groq_api_key: api key do usuario da plataforma groq
@@ -181,7 +181,7 @@ def chat_client_groq(groq_api_key):
     client = None
     if groq_api_key:
         try:
-            client = Groq(api_key=groq_api_key) # cria um cliente grok
+            client = Groq(api_key=groq_api_key) # cria um cliente Groq
             print('ok')
             return client
         except Exception as e:
@@ -199,10 +199,10 @@ def chat_client_groq(groq_api_key):
         st.stop()
 
 
-def input_chat_prompt_user(groq_api_key):
-    """ Criação de chat interativo do usuario
+def input_chat_prompt_user(groq_api_key: str) -> tuple[Groq, str]:
+    """ Criação de chat interativo do usuário
 
-    Responsavel por criar a interação via chat, do usuario com a aplicação, além de exibir as mensagem e salvar na sessão do usuario
+    Responsável por criar a interação via chat, do usuário com a aplicação, além de exibir as mensagens e salvar na sessão do usuário
 
     :param groq_api_key:
     :return: client
@@ -223,7 +223,17 @@ def input_chat_prompt_user(groq_api_key):
     return client, prompt
 
 
-def seed_menssage_for_apt(groq_api_key):
+def seed_menssage_for_apt(groq_api_key: str) -> tuple[Groq, list[dict[str, str]], str]:
+    """ Cria mensagem para API
+
+    Tem como função criar uma lista que vai armazenar uma chave com dados para API da LLM
+
+    :param groq_api_key:
+    :returns:
+        client: cliente criado da Groq
+        messages_for_api: objeto lista: mensagem para API
+        prompt: objeto str: prompt para API
+    """
     client, prompt = input_chat_prompt_user(groq_api_key)
     custom_prompt = prompt_custom()
 
@@ -233,7 +243,15 @@ def seed_menssage_for_apt(groq_api_key):
     return client, messages_for_api, prompt
 
 
-def response_chat_prompt_llm(groq_api_key):
+def response_chat_prompt_llm(groq_api_key: str) -> None:
+    """ Conecta as mensagens do usuário com a LLM através da API
+
+    Abre o chat do assistente, conecta com a LLM através da API,
+    extrai as respostas da IA e salva no objeto lista, que está dentro da sessão do usuário
+
+    :param groq_api_key:
+    :return: None
+    """
     client, messages_for_api, prompt = seed_menssage_for_apt(groq_api_key)
     if client and prompt:
         with st.chat_message('assistant'):
@@ -247,7 +265,7 @@ def response_chat_prompt_llm(groq_api_key):
                         max_completion_tokens=1024,
                     )
 
-                    ai_response = chat_completion.choices[0].message.content # extrai a resposata gerada pela ia
+                    ai_response = chat_completion.choices[0].message.content # extrai a resposta gerada pela IA
                     st.markdown(ai_response)
                     st.session_state.messages.append({'role': 'assistant', 'content': ai_response})
                 except Exception as e:
